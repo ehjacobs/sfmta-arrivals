@@ -13,5 +13,5 @@ screenshot:
 
 deploy:
 	rsync -avz --exclude '.venv' --exclude '__pycache__' --exclude '.git' \
-		. pi@raspberrypi.local:/home/pi/sf-bus-viewer/
-	ssh pi@raspberrypi.local 'cd /home/pi/sf-bus-viewer && sudo systemctl restart sf-bus-viewer'
+		. pi@raspberrypi.local:/home/pi/sfmta-arrivals/
+	ssh pi@raspberrypi.local 'cd /home/pi/sfmta-arrivals && sudo systemctl restart sfmta-arrivals'

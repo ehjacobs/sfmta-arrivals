@@ -14,7 +14,7 @@ sudo raspi-config nonint do_spi 0
 sudo raspi-config nonint do_i2c 0
 
 # Project setup
-cd /home/pi/sf-bus-viewer
+cd /home/pi/sfmta-arrivals
 
 echo "Creating virtual environment..."
 python3 -m venv .venv
@@ -27,12 +27,12 @@ pip install "inky[rpi]"
 
 # Systemd service
 echo "Installing systemd service..."
-sudo cp deploy/sf-bus-viewer.service /etc/systemd/system/
+sudo cp deploy/sfmta-arrivals.service /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable sf-bus-viewer.service
+sudo systemctl enable sfmta-arrivals.service
 
 echo ""
 echo "=== Setup complete ==="
-echo "1. Copy your config.yaml to /home/pi/sf-bus-viewer/"
-echo "2. Start with: sudo systemctl start sf-bus-viewer"
-echo "3. Check logs: journalctl -u sf-bus-viewer -f"
+echo "1. Copy your config.yaml to /home/pi/sfmta-arrivals/"
+echo "2. Start with: sudo systemctl start sfmta-arrivals"
+echo "3. Check logs: journalctl -u sfmta-arrivals -f"

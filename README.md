@@ -22,8 +22,8 @@ Arrival data comes from the [511.org](https://511.org/open-data) real-time trans
 ## Quick Start (macOS / Linux)
 
 ```bash
-git clone https://github.com/ehjacobs/sf-bus-viewer.git
-cd sf-bus-viewer
+git clone https://github.com/ehjacobs/sfmta-arrivals.git
+cd sfmta-arrivals
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -87,8 +87,8 @@ display:
 
 ```bash
 # Clone the repo on the Pi
-git clone https://github.com/ehjacobs/sf-bus-viewer.git
-cd sf-bus-viewer
+git clone https://github.com/ehjacobs/sfmta-arrivals.git
+cd sfmta-arrivals
 
 # Run the install script (installs deps, enables SPI/I2C, sets up systemd)
 bash deploy/install.sh
@@ -102,10 +102,10 @@ nano config.yaml
 ### Start the service
 
 ```bash
-sudo systemctl start sf-bus-viewer
+sudo systemctl start sfmta-arrivals
 
 # Check it's running
-journalctl -u sf-bus-viewer -f
+journalctl -u sfmta-arrivals -f
 
 # It will auto-start on boot
 ```
@@ -132,6 +132,10 @@ make screenshot    # render test data using config.example.yaml (for committing)
 - At the default 2-minute refresh interval, this uses ~30 API calls/hour (limit is 60/hour)
 - Frequency is calculated by averaging gaps across all available upcoming arrivals, smoothing out bus bunching
 - The 7-color e-ink display takes ~25 seconds for a full refresh (no partial refresh on these panels)
+
+## Disclaimer
+
+This is an independent personal project. It is not affiliated with, endorsed by, or associated with SFMTA, SF Muni, or 511.org.
 
 ## License
 
