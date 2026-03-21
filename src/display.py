@@ -22,15 +22,11 @@ class InkyDisplay:
         if self._inky is None:
             # The gpiodevice library's pin conflict check falsely flags the
             # kernel SPI driver as a conflict (GPIO8/CS0), even though the
-            # Inky library needs that driver. Patch the check to be non-fatal
-            # so it warns instead of raising.
+            # Inky library needs that driver. Patch the check to always
+            # return True so the Inky setup proceeds normally.
             import gpiodevice
             _original_check = gpiodevice.check_pins_available
-
-            def _lenient_check(chip, pins, fatal=True):
-                return _original_check(chip, pins, fatal=False)
-
-            gpiodevice.check_pins_available = _lenient_check
+            gpiodevice.check_pins_available = lambda chip, pins, fatal=True: True
             try:
                 from inky.auto import auto
                 self._inky = auto()
