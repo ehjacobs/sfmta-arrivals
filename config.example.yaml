@@ -8,17 +8,17 @@ stops:
     walk_minutes: 4
     routes:
       - line: "J"
-        direction: "Inbound"
+        direction: "Balboa Park"    # substring match on DestinationName from API
       - line: "N"
-        direction: "Outbound"
+        direction: "Ocean Beach"
   - stop_code: "13915"
     name: "Haight & Fillmore"
     walk_minutes: 7
     routes:
       - line: "7"
-        direction: "Downtown"
+        direction: "Noriega"
       - line: "22"
-        direction: "Marina"
+        direction: "Bay St"
 
 thresholds:
   rush_max: 0

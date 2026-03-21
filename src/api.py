@@ -70,9 +70,11 @@ def parse_arrivals(raw_json: dict, config: AppConfig, now: datetime | None = Non
     grouped: dict[tuple, list[Arrival]] = {}
 
     try:
-        visits = (
-            raw_json["ServiceDelivery"]["StopMonitoringDelivery"][0]["MonitoredStopVisit"]
-        )
+        smd = raw_json["ServiceDelivery"]["StopMonitoringDelivery"]
+        # 511.org returns either a dict or a list wrapping the delivery
+        if isinstance(smd, list):
+            smd = smd[0]
+        visits = smd["MonitoredStopVisit"]
     except (KeyError, IndexError, TypeError) as e:
         errors.append(f"Invalid API response: {e}")
         return DisplayData(errors=errors, last_updated=now)
@@ -81,7 +83,7 @@ def parse_arrivals(raw_json: dict, config: AppConfig, now: datetime | None = Non
         try:
             journey = visit["MonitoredVehicleJourney"]
             stop_ref = journey["MonitoredCall"]["StopPointRef"]
-            line = journey["PublishedLineName"]
+            line = journey.get("LineRef", "")
             destination = journey.get("DestinationName", "")
 
             if stop_ref not in stop_routes:

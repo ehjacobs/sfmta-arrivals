@@ -16,7 +16,7 @@ MAX_ROWS = 6
 MAX_ARRIVALS = 4
 
 # Grid column layout (x positions)
-BADGE_WIDTH = 70
+BADGE_WIDTH = 80
 CONTENT_X = BADGE_WIDTH + 10
 # 4 arrival columns evenly spaced in the available area
 ARRIVALS_X0 = CONTENT_X       # first arrival aligns with content

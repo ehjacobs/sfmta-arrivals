@@ -1,6 +1,6 @@
 # SF Bus Viewer
 
-Real-time SF Muni bus arrival display for Raspberry Pi Zero 2 W + Pimoroni Inky Impression 7.3" e-ink display.
+Real-time SF Muni arrival display. Runs as a PNG generator on any machine, or on a Raspberry Pi with a Pimoroni Inky Impression 7.3" e-ink display.
 
 ## Quick Start
 
@@ -21,6 +21,7 @@ make dev     # fetch live data and render to output.png
 - `src/renderer.py` — PIL-based 800x480 image rendering; DejaVu fonts from `fonts/`
 - `src/display.py` — SimulatorDisplay (PNG) for dev, InkyDisplay for Pi hardware
 - `src/main.py` — Entry point with `--config`, `--once`, `--test` flags
+- `src/lookup.py` — CLI utility to discover route destinations and stop info from the API
 
 ## Key Conventions
 
@@ -29,8 +30,10 @@ make dev     # fetch live data and render to output.png
 - Frequency is averaged across all available arrival gaps (not just first two)
 - Times shown in America/Los_Angeles timezone
 - API response may have BOM prefix — stripped before JSON parsing
-- SIRI JSON path: `ServiceDelivery.StopMonitoringDelivery[0].MonitoredStopVisit`
-- Direction matching uses substring match on `DestinationName`
+- `StopMonitoringDelivery` may be a dict or list — code handles both
+- Route matching uses `LineRef` (e.g., "14R", "J"), not `PublishedLineName` (e.g., "MISSION")
+- Direction matching uses substring match on `DestinationName` (e.g., "Steuart" matches "Steuart St & Mission St")
+- Use `python -m src.lookup --route <route>` to discover valid destination strings
 - `config.yaml` contains API secrets — never commit (it's in .gitignore)
 
 ## Deploy to Pi

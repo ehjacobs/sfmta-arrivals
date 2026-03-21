@@ -89,11 +89,6 @@ def fetch_and_render(config, display):
         data = parse_arrivals(raw, config, now)
     except Exception as e:
         print(f"API error: {e}")
-        if 'raw' in locals():
-            # Print a snippet of the response for debugging
-            import json
-            snippet = json.dumps(raw, indent=2)[:500]
-            print(f"Response snippet:\n{snippet}")
         data = DisplayData(last_updated=now, errors=[str(e)])
 
     image = render(data, config.thresholds)
