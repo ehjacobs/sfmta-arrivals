@@ -7,8 +7,9 @@ Real-time SF Muni arrival display. Runs as a PNG generator on any machine, or on
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp config.example.yaml config.yaml  # then edit with your API key
 make test    # render test data to example.png (no API key needed)
+
+cp config.example.yaml config.yaml  # then edit with your API key
 make dev     # fetch live data and render to output.png
 ```
 

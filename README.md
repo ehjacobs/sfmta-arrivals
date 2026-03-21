@@ -1,4 +1,4 @@
-# SFMTA Arrival Time Viewer
+# SFMTA Arrivals
 
 Real-time SF Muni arrival times, color-coded by whether you can walk to the stop in time. Runs anywhere Python does — as a PNG generator on your laptop, or on a Raspberry Pi driving an e-ink display.
 
@@ -113,10 +113,14 @@ python -m src.lookup --routes
 git clone https://github.com/ehjacobs/sfmta-arrivals.git
 cd sfmta-arrivals
 
-# Run the install script (installs deps, enables SPI/I2C, sets up systemd)
+# Run the install script (installs deps, configures SPI, sets up systemd)
 bash deploy/install.sh
 
-# Create your config
+# Reboot to apply SPI configuration
+sudo reboot
+
+# After reboot, create your config
+cd ~/sfmta-arrivals
 cp config.example.yaml config.yaml
 nano config.yaml
 # Set your API key, stops, and display.simulate to false
