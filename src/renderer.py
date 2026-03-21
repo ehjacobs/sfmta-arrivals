@@ -171,17 +171,17 @@ def _draw_route_row(
                 color = urgency_color(arr.minutes_away, route.walk_minutes, thresholds)
                 mins_text = f"{arr.minutes_away} min"
                 local_arr = arr.expected_time.astimezone(SF_TZ)
-                clock_text = f"({local_arr.strftime('%-I:%M')})"
+                clock_text = local_arr.strftime("%-I:%M %p")
                 if color is UNREACHABLE:
                     draw.text((col_x, bottom_line_y), mins_text, fill=BLACK, font=fonts["arrival_time"])
                     bbox = draw.textbbox((col_x, bottom_line_y), mins_text, font=fonts["arrival_time"])
                     strike_y = (bbox[1] + bbox[3]) // 2
                     draw.line([(bbox[0], strike_y), (bbox[2], strike_y)], fill=BLACK, width=3)
-                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=(150, 150, 150), font=fonts["arrival_clock"])
+                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=BLUE, font=fonts["arrival_clock"])
                 else:
                     draw.text((col_x, bottom_line_y), mins_text, fill=color, font=fonts["arrival_time"])
                     bbox = draw.textbbox((col_x, bottom_line_y), mins_text, font=fonts["arrival_time"])
-                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=(120, 120, 120), font=fonts["arrival_clock"])
+                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=BLUE, font=fonts["arrival_clock"])
 
     # Frequency on the far right: "Every" on top, "~X min" below
     if route.frequency_minutes is not None:
