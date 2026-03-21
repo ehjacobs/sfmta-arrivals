@@ -8,7 +8,7 @@ Shows up to 6 routes across multiple stops:
 
 - **~~Strikethrough~~** — you can't make it
 - **Green** — go now, you'll catch it
-- **Orange** — comfortable wait at the stop
+- **Orange** — moderate wait at the stop
 - **Red** — long wait
 
 Arrival data comes from the [511.org](https://511.org/open-data) real-time transit API (SIRI StopMonitoring format). Uses a single API call per refresh to stay well within rate limits.
@@ -73,7 +73,7 @@ stops:
 thresholds:                    # minutes of buffer after walk time
   rush_max: 0                  # buffer <= 0 → can't make it (strikethrough)
   ideal_max: 5                 # buffer 0-5 → go now (green)
-  medium_max: 10               # buffer 5-10 → comfortable (yellow)
+  medium_max: 10               # buffer 5-10 → moderate wait (yellow)
                                # buffer > 10 → long wait (red)
 
 display:

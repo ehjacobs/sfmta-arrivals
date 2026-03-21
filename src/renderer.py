@@ -48,7 +48,7 @@ def render(data: DisplayData, thresholds: ThresholdConfig) -> Image.Image:
 
     # Header
     draw.rectangle([(0, 0), (WIDTH, HEADER_HEIGHT)], fill=BLUE)
-    draw.text((10, 8), "SF Muni Arrivals", fill=WHITE, font=fonts["header"])
+    draw.text((10, 8), "Nearby SF Muni Arrivals", fill=WHITE, font=fonts["header"])
 
     if data.last_updated:
         local_time = data.last_updated.astimezone(SF_TZ)

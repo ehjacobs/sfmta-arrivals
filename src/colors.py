@@ -20,7 +20,7 @@ def urgency_color(minutes_away: int, walk_minutes: int, thresholds: ThresholdCon
     """Return color based on buffer time (minutes_away - walk_minutes).
 
     Returns UNREACHABLE (None) for buses that can't be caught,
-    GREEN for go-now, YELLOW for comfortable, RED for long wait.
+    GREEN for go-now, YELLOW for moderate wait, RED for long wait.
     """
     buffer = minutes_away - walk_minutes
     if buffer <= thresholds.rush_max:
