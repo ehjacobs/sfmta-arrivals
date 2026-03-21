@@ -7,7 +7,8 @@ import yaml
 @dataclass
 class RouteConfig:
     line: str
-    direction: str
+    direction: str        # substring match against API's DestinationName
+    display_name: str = ""  # shown on display; defaults to direction if empty
 
 
 @dataclass

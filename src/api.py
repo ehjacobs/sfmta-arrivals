@@ -141,7 +141,7 @@ def parse_arrivals(raw_json: dict, config: AppConfig, now: datetime | None = Non
 
             route_arrivals_list.append(RouteArrivals(
                 line=route_cfg.line,
-                direction=route_cfg.direction,
+                direction=route_cfg.display_name or route_cfg.direction,
                 stop_name=stop_name,
                 walk_minutes=walk_minutes,
                 arrivals=top3,

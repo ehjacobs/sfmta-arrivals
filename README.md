@@ -46,7 +46,7 @@ Copy `config.example.yaml` to `config.yaml` and edit:
 ```yaml
 api_key: "YOUR_511_API_KEY"
 agency: "SF"
-refresh_interval_seconds: 120
+refresh_interval_minutes: 2
 
 stops:
   - stop_code: "15557"        # from 511.org stop list
@@ -54,9 +54,11 @@ stops:
     walk_minutes: 7            # your walking time to this stop
     routes:
       - line: "14R"
-        direction: "Main St"  # substring match on DestinationName from API
+        direction: "Main St"       # substring match on DestinationName from API
+        display_name: "Downtown"   # shown on display (optional, defaults to direction)
       - line: "49"
         direction: "North Point"
+        display_name: "Fisherman's Wharf"
 
 thresholds:                    # minutes of buffer after walk time
   rush_max: 0                  # buffer <= 0 → can't make it (strikethrough)
