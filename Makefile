@@ -1,14 +1,11 @@
 CONFIG ?= config.yaml
 
-.PHONY: dev test screenshot lookup
+.PHONY: dev test lookup
 
 dev:
 	python -m src.main --config $(CONFIG) --once
 
 test:
-	python -m src.main --config $(CONFIG) --test
-
-screenshot:
 	python -m src.main --config config.example.yaml --test
 
 lookup:

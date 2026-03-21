@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 # Render test data (no API key needed)
 make test
-open output.png
+open example.png
 
 # Use live data
 cp config.example.yaml config.yaml
@@ -49,16 +49,26 @@ agency: "SF"
 refresh_interval_minutes: 2
 
 stops:
-  - stop_code: "15557"        # from 511.org stop list
-    name: "Mission & 20th"
-    walk_minutes: 7            # your walking time to this stop
+  - stop_code: "15553"        # from 511.org stop list
+    name: "Church & Duboce"
+    walk_minutes: 4            # your walking time to this stop
     routes:
-      - line: "14R"
-        direction: "Main St"       # substring match on DestinationName from API
-        display_name: "Downtown"   # shown on display (optional, defaults to direction)
-      - line: "49"
-        direction: "North Point"
-        display_name: "Fisherman's Wharf"
+      - line: "J"
+        direction: "Balboa Park"   # substring match on DestinationName from API
+        display_name: "Outbound"   # shown on display (optional, defaults to direction)
+      - line: "N"
+        direction: "Ocean Beach"
+        display_name: "Outbound"
+  - stop_code: "13915"
+    name: "Haight & Fillmore"
+    walk_minutes: 7
+    routes:
+      - line: "7"
+        direction: "Noriega"
+        display_name: "Outbound"
+      - line: "22"
+        direction: "Bay St"
+        display_name: "Marina"
 
 thresholds:                    # minutes of buffer after walk time
   rush_max: 0                  # buffer <= 0 → can't make it (strikethrough)
@@ -73,16 +83,16 @@ display:
   rotation: 0                  # 0, 90, 180, 270
 ```
 
-**Finding stop codes:** Search for your stop on [511.org](https://511.org/) or use the GTFS stops.txt for the SF agency. You can also use the lookup tool to see what routes serve a stop: `python -m src.lookup --stop 15557`
+**Finding stop codes:** Search for your stop on [511.org](https://511.org/) or use the GTFS stops.txt for the SF agency. You can also use the lookup tool to see what routes serve a stop: `python -m src.lookup --stop 15553`
 
 **Direction matching:** The `direction` field is matched as a substring against the vehicle's `DestinationName` from the API. These are real street names (e.g., `"Steuart St & Mission St"`), not generic labels like "Inbound". Use the lookup tool to find the right values:
 
 ```bash
 # Show destinations for a route
-python -m src.lookup --route 14R
+python -m src.lookup --route J
 
 # Show all routes and destinations at a stop
-python -m src.lookup --stop 15557
+python -m src.lookup --stop 15553
 
 # List all currently active routes
 python -m src.lookup --routes
@@ -136,12 +146,8 @@ sudo systemctl restart sfmta-arrivals
 ## Development
 
 ```bash
-make test          # render test data to output.png
+make test          # render test data to example.png (no API key needed)
 make dev           # fetch live data, render to output.png
-make screenshot    # render test data using config.example.yaml (for committing)
-make lookup ARGS="--route 14R"   # look up destinations for a route
-make lookup ARGS="--stop 15557"  # look up routes at a stop
-make lookup ARGS="--routes"      # list all active routes
 ```
 
 ## How It Works
