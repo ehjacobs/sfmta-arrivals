@@ -104,6 +104,7 @@ def main():
 
     if args.test:
         config.display.simulate = True
+        config.display.output_path = "example.png"
         display = create_display(config.display)
         data = make_test_data()
         image = render(data, config.thresholds)

@@ -2,7 +2,7 @@
 
 Real-time SF Muni arrival times, color-coded by whether you can walk to the stop in time. Runs anywhere Python does — as a PNG generator on your laptop, or on a Raspberry Pi driving an e-ink display.
 
-![Display preview](output.png)
+![Display preview](example.png)
 
 Shows up to 6 routes across multiple stops:
 

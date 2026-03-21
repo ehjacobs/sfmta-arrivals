@@ -9,6 +9,7 @@ venv/
 config.yaml
 output.png
 *.png
+!example.png
 !fonts/*.ttf
 .env
 .DS_Store
