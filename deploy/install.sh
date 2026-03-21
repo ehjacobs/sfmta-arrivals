@@ -31,7 +31,7 @@ source .venv/bin/activate
 echo "Installing Python dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
-pip install "inky[rpi]"
+pip install inky
 
 # Generate and install systemd service
 echo "Installing systemd service..."
