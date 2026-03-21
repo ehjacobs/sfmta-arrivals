@@ -117,7 +117,7 @@ def main():
 
     # Main loop
     interval = config.refresh_interval_minutes
-    print(f"Starting SF Bus Viewer (refresh every {interval} min, aligned to minute boundary)")
+    print(f"Starting SFMTA Arrivals (refresh every {interval} min, aligned to minute boundary)")
     while True:
         try:
             fetch_and_render(config, display)

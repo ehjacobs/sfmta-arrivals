@@ -138,7 +138,7 @@ journalctl -u sfmta-arrivals -f
 SSH into your Pi (e.g., via [Raspberry Pi Connect](https://www.raspberrypi.com/software/connect/)) and pull the latest code:
 
 ```bash
-cd /home/pi/sfmta-arrivals
+cd ~/sfmta-arrivals
 git pull
 sudo systemctl restart sfmta-arrivals
 ```

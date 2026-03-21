@@ -1,4 +1,4 @@
-# SF Bus Viewer
+# SFMTA Arrivals
 
 Real-time SF Muni arrival display. Runs as a PNG generator on any machine, or on a Raspberry Pi with a Pimoroni Inky Impression 7.3" e-ink display.
 
