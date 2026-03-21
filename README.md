@@ -123,13 +123,15 @@ journalctl -u sfmta-arrivals -f
 # It will auto-start on boot
 ```
 
-### Deploy updates from your dev machine
+### Deploy updates
+
+SSH into your Pi (e.g., via [Raspberry Pi Connect](https://www.raspberrypi.com/software/connect/)) and pull the latest code:
 
 ```bash
-make deploy
+cd /home/pi/sfmta-arrivals
+git pull
+sudo systemctl restart sfmta-arrivals
 ```
-
-This rsyncs the project to the Pi and restarts the service. Assumes the Pi is reachable at `raspberrypi.local` with user `pi`.
 
 ## Development
 
