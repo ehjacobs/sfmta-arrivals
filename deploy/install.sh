@@ -16,10 +16,17 @@ echo "Installing system packages..."
 sudo apt-get update
 sudo apt-get install -y python3-venv python3-pip python3-dev libopenjp2-7
 
-# Disable kernel SPI driver (Inky library controls the pins directly via GPIO)
+# Enable SPI and I2C
 echo "Configuring SPI and I2C..."
-sudo raspi-config nonint do_spi 1
+sudo raspi-config nonint do_spi 0
 sudo raspi-config nonint do_i2c 0
+
+# Release SPI chip-select pin so the Inky library can manage it via GPIO.
+# See: https://github.com/pimoroni/inky/issues/229
+if ! grep -q "dtoverlay=spi0-0cs" /boot/firmware/config.txt; then
+    echo "Adding spi0-0cs overlay..."
+    echo "dtoverlay=spi0-0cs" | sudo tee -a /boot/firmware/config.txt > /dev/null
+fi
 
 # Project setup
 cd "$PROJECT_DIR"
