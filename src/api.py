@@ -127,7 +127,7 @@ def parse_arrivals(raw_json: dict, config: AppConfig, now: datetime | None = Non
             arrivals = grouped.get(key, [])
             arrivals.sort(key=lambda a: a.minutes_away)
 
-            top4 = arrivals[:4]
+            top3 = arrivals[:3]
             frequency = None
             if len(arrivals) >= 2:
                 # Average gap across all consecutive arrivals for a smoother estimate
@@ -144,7 +144,7 @@ def parse_arrivals(raw_json: dict, config: AppConfig, now: datetime | None = Non
                 direction=route_cfg.direction,
                 stop_name=stop_name,
                 walk_minutes=walk_minutes,
-                arrivals=top4,
+                arrivals=top3,
                 frequency_minutes=frequency,
             ))
 

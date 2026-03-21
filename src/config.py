@@ -37,7 +37,7 @@ class DisplayConfig:
 class AppConfig:
     api_key: str
     agency: str
-    refresh_interval_seconds: int
+    refresh_interval_minutes: int
     stops: list[StopConfig]
     thresholds: ThresholdConfig
     display: DisplayConfig
@@ -87,7 +87,8 @@ def load_config(path: str) -> AppConfig:
     return AppConfig(
         api_key=raw["api_key"],
         agency=raw.get("agency", "SF"),
-        refresh_interval_seconds=raw.get("refresh_interval_seconds", 120),
+        refresh_interval_minutes=raw.get("refresh_interval_minutes",
+                                        raw.get("refresh_interval_seconds", 120) // 60 or 2),
         stops=stops,
         thresholds=thresholds,
         display=display,

@@ -22,7 +22,6 @@ def make_test_data() -> DisplayData:
                     Arrival(line="J", destination="Inbound", expected_time=now, minutes_away=3),
                     Arrival(line="J", destination="Inbound", expected_time=now, minutes_away=8),
                     Arrival(line="J", destination="Inbound", expected_time=now, minutes_away=14),
-                    Arrival(line="J", destination="Inbound", expected_time=now, minutes_away=19),
                 ],
                 frequency_minutes=5,
             ),
@@ -33,9 +32,8 @@ def make_test_data() -> DisplayData:
                     Arrival(line="N", destination="Outbound", expected_time=now, minutes_away=7),
                     Arrival(line="N", destination="Outbound", expected_time=now, minutes_away=12),
                     Arrival(line="N", destination="Outbound", expected_time=now, minutes_away=18),
-                    Arrival(line="N", destination="Outbound", expected_time=now, minutes_away=25),
                 ],
-                frequency_minutes=6,
+                frequency_minutes=5,
             ),
             RouteArrivals(
                 line="7", direction="Downtown", stop_name="Haight & Fillmore",
@@ -54,7 +52,6 @@ def make_test_data() -> DisplayData:
                     Arrival(line="22", destination="Marina", expected_time=now, minutes_away=11),
                     Arrival(line="22", destination="Marina", expected_time=now, minutes_away=22),
                     Arrival(line="22", destination="Marina", expected_time=now, minutes_away=33),
-                    Arrival(line="22", destination="Marina", expected_time=now, minutes_away=44),
                 ],
                 frequency_minutes=11,
             ),
@@ -65,7 +62,6 @@ def make_test_data() -> DisplayData:
                     Arrival(line="F", destination="Wharf", expected_time=now, minutes_away=1),
                     Arrival(line="F", destination="Wharf", expected_time=now, minutes_away=9),
                     Arrival(line="F", destination="Wharf", expected_time=now, minutes_away=17),
-                    Arrival(line="F", destination="Wharf", expected_time=now, minutes_away=26),
                 ],
                 frequency_minutes=8,
             ),
@@ -119,7 +115,8 @@ def main():
         return
 
     # Main loop
-    print(f"Starting SF Bus Viewer (refresh every {config.refresh_interval_seconds}s)")
+    interval = config.refresh_interval_minutes
+    print(f"Starting SF Bus Viewer (refresh every {interval} min, aligned to minute boundary)")
     while True:
         try:
             fetch_and_render(config, display)
@@ -130,7 +127,13 @@ def main():
             print(f"Error in main loop: {e}")
 
         try:
-            time.sleep(config.refresh_interval_seconds)
+            # Sleep until the next minute boundary + 2s buffer
+            now = time.time()
+            seconds_into_minute = now % 60
+            seconds_to_next_minute = 60 - seconds_into_minute + 2
+            remaining_minutes = interval - 1
+            sleep_seconds = seconds_to_next_minute + remaining_minutes * 60
+            time.sleep(sleep_seconds)
         except KeyboardInterrupt:
             print("\nShutting down")
             sys.exit(0)

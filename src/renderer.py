@@ -13,15 +13,15 @@ WIDTH = 800
 HEIGHT = 480
 HEADER_HEIGHT = 40
 MAX_ROWS = 6
-MAX_ARRIVALS = 4
+MAX_ARRIVALS = 3
 
 # Grid column layout (x positions)
 BADGE_WIDTH = 80
 CONTENT_X = BADGE_WIDTH + 10
-# 4 arrival columns evenly spaced in the available area
+# 3 arrival columns evenly spaced in the available area
 ARRIVALS_X0 = CONTENT_X       # first arrival aligns with content
-ARRIVALS_WIDTH = 620           # total width for 4 arrival columns
-COL_WIDTH = ARRIVALS_WIDTH // MAX_ARRIVALS  # ~155px per column
+ARRIVALS_WIDTH = 620           # total width for 3 arrival columns
+COL_WIDTH = ARRIVALS_WIDTH // MAX_ARRIVALS  # ~207px per column
 FREQ_X = WIDTH - 90           # frequency column on far right
 
 FONTS_DIR = Path(__file__).parent.parent / "fonts"
@@ -34,7 +34,8 @@ def _load_fonts():
         "header_small": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 16),
         "route_badge": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 30),
         "stop_info": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 16),
-        "arrival_time": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 26),
+        "arrival_time": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 24),
+        "arrival_clock": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 15),
         "frequency": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 18),
         "frequency_label": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 13),
     }
@@ -168,14 +169,19 @@ def _draw_route_row(
             if col_idx < len(route.arrivals):
                 arr = route.arrivals[col_idx]
                 color = urgency_color(arr.minutes_away, route.walk_minutes, thresholds)
-                time_text = f"{arr.minutes_away} min"
+                mins_text = f"{arr.minutes_away} min"
+                local_arr = arr.expected_time.astimezone(SF_TZ)
+                clock_text = f"({local_arr.strftime('%-I:%M')})"
                 if color is UNREACHABLE:
-                    draw.text((col_x, bottom_line_y), time_text, fill=BLACK, font=fonts["arrival_time"])
-                    bbox = draw.textbbox((col_x, bottom_line_y), time_text, font=fonts["arrival_time"])
+                    draw.text((col_x, bottom_line_y), mins_text, fill=BLACK, font=fonts["arrival_time"])
+                    bbox = draw.textbbox((col_x, bottom_line_y), mins_text, font=fonts["arrival_time"])
                     strike_y = (bbox[1] + bbox[3]) // 2
                     draw.line([(bbox[0], strike_y), (bbox[2], strike_y)], fill=BLACK, width=3)
+                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=(150, 150, 150), font=fonts["arrival_clock"])
                 else:
-                    draw.text((col_x, bottom_line_y), time_text, fill=color, font=fonts["arrival_time"])
+                    draw.text((col_x, bottom_line_y), mins_text, fill=color, font=fonts["arrival_time"])
+                    bbox = draw.textbbox((col_x, bottom_line_y), mins_text, font=fonts["arrival_time"])
+                    draw.text((bbox[2] + 4, bottom_line_y + 6), clock_text, fill=(120, 120, 120), font=fonts["arrival_clock"])
 
     # Frequency on the far right: "Every" on top, "~X min" below
     if route.frequency_minutes is not None:

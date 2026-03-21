@@ -1,6 +1,6 @@
 api_key: "YOUR_511_API_KEY"
 agency: "SF"
-refresh_interval_seconds: 120
+refresh_interval_minutes: 2
 
 stops:
   - stop_code: "15553"

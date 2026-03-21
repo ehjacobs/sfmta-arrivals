@@ -16,7 +16,7 @@ class RouteArrivals:
     direction: str
     stop_name: str
     walk_minutes: int
-    arrivals: list[Arrival] = field(default_factory=list)  # max 4
+    arrivals: list[Arrival] = field(default_factory=list)  # max 3
     frequency_minutes: int | None = None
 
 
