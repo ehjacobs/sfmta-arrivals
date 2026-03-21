@@ -16,9 +16,9 @@ echo "Installing system packages..."
 sudo apt-get update
 sudo apt-get install -y python3-venv python3-pip python3-dev libopenjp2-7
 
-# Enable SPI and I2C
-echo "Enabling SPI and I2C..."
-sudo raspi-config nonint do_spi 0
+# Disable kernel SPI driver (Inky library controls the pins directly via GPIO)
+echo "Configuring SPI and I2C..."
+sudo raspi-config nonint do_spi 1
 sudo raspi-config nonint do_i2c 0
 
 # Project setup
