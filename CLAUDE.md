@@ -8,7 +8,7 @@ Real-time SF Muni arrival display. Runs as a PNG generator on any machine, or on
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp config.example.yaml config.yaml  # then edit with your API key
-make test    # render test data to output.png (no API key needed)
+make test    # render test data to example.png (no API key needed)
 make dev     # fetch live data and render to output.png
 ```
 
@@ -38,6 +38,10 @@ make dev     # fetch live data and render to output.png
 
 ## Deploy to Pi
 
+SSH into the Pi and pull the latest code:
+
 ```bash
-make deploy  # rsync + restart systemd service
+cd ~/sfmta-arrivals
+git pull
+sudo systemctl restart sfmta-arrivals
 ```
