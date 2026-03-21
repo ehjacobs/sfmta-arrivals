@@ -12,9 +12,8 @@ ORANGE = (200, 100, 0)
 # Sentinel for unreachable arrivals (drawn as black with strikethrough)
 UNREACHABLE = None
 
-# Background colors for row striping
-ROW_BG_LIGHT = WHITE
-ROW_BG_DARK = (235, 235, 235)
+# Row separator color
+ROW_SEPARATOR = BLUE
 
 
 def urgency_color(minutes_away: int, walk_minutes: int, thresholds: ThresholdConfig):

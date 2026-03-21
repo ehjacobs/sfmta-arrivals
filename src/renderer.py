@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from PIL import Image, ImageDraw, ImageFont
 
 from src.colors import (
-    BLACK, WHITE, RED, BLUE, UNREACHABLE, ROW_BG_DARK, ROW_BG_LIGHT, urgency_color,
+    BLACK, WHITE, RED, BLUE, UNREACHABLE, ROW_SEPARATOR, urgency_color,
 )
 from src.config import ThresholdConfig
 from src.models import DisplayData, RouteArrivals
@@ -77,11 +77,10 @@ def render(data: DisplayData, thresholds: ThresholdConfig) -> Image.Image:
 
     for i, route in enumerate(data.routes[:MAX_ROWS]):
         y = banner_y + i * row_height
-        bg = ROW_BG_LIGHT if i % 2 == 0 else ROW_BG_DARK
-        draw.rectangle([(0, y), (WIDTH, y + row_height)], fill=bg)
 
-        # Separator line
-        draw.line([(0, y), (WIDTH, y)], fill=(180, 180, 180), width=1)
+        # Separator line between rows
+        if i > 0:
+            draw.line([(0, y), (WIDTH, y)], fill=ROW_SEPARATOR, width=1)
 
         _draw_route_row(draw, fonts, route, thresholds, y, row_height)
 
