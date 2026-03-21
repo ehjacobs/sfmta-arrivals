@@ -1,0 +1,32 @@
+api_key: "YOUR_511_API_KEY"
+agency: "SF"
+refresh_interval_seconds: 120
+
+stops:
+  - stop_code: "15553"
+    name: "Church & Duboce"
+    walk_minutes: 4
+    routes:
+      - line: "J"
+        direction: "Inbound"
+      - line: "N"
+        direction: "Outbound"
+  - stop_code: "13915"
+    name: "Haight & Fillmore"
+    walk_minutes: 7
+    routes:
+      - line: "7"
+        direction: "Downtown"
+      - line: "22"
+        direction: "Marina"
+
+thresholds:
+  rush_max: 0
+  ideal_max: 5
+  medium_max: 10
+
+display:
+  simulate: true
+  output_path: "output.png"
+  saturation: 0.5
+  rotation: 0

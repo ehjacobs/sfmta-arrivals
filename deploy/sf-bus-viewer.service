@@ -1,0 +1,16 @@
+[Unit]
+Description=SF Bus Arrival Display
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/sf-bus-viewer
+ExecStart=/home/pi/sf-bus-viewer/.venv/bin/python -m src.main --config config.yaml
+Restart=always
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
