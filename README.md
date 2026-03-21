@@ -8,7 +8,7 @@ Shows up to 6 routes across multiple stops:
 
 - **~~Strikethrough~~** — you can't make it
 - **Green** — go now, you'll catch it
-- **Yellow** — comfortable wait at the stop
+- **Orange** — comfortable wait at the stop
 - **Red** — long wait
 
 Arrival data comes from the [511.org](https://511.org/open-data) real-time transit API (SIRI StopMonitoring format). Uses a single API call per refresh to stay well within rate limits.

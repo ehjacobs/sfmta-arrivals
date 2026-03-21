@@ -33,9 +33,9 @@ def _load_fonts():
         "header": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 20),
         "header_small": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 16),
         "route_badge": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 30),
-        "stop_info": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 16),
+        "stop_info": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 16),
         "arrival_time": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 24),
-        "arrival_clock": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 15),
+        "arrival_clock": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 16),
         "frequency": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 18),
         "frequency_label": ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 13),
     }
@@ -195,5 +195,5 @@ def _draw_route_row(
 
         # Right-align both
         right_edge = WIDTH - 10
-        draw.text((right_edge - label_w, top_line_y + 2), label_text, fill=(120, 120, 120), font=fonts["frequency_label"])
+        draw.text((right_edge - label_w, top_line_y + 2), label_text, fill=BLACK, font=fonts["frequency_label"])
         draw.text((right_edge - freq_w, bottom_line_y + 2), freq_text, fill=BLACK, font=fonts["frequency"])

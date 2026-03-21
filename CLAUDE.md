@@ -27,7 +27,7 @@ make dev     # fetch live data and render to output.png
 ## Key Conventions
 
 - Display is 800x480, 7-color e-ink palette
-- Color coding: strikethrough black = unreachable, green = go now, yellow = comfortable wait, red = long wait
+- Color coding: strikethrough black = unreachable, green = go now, orange = comfortable wait, red = long wait
 - Frequency is averaged across all available arrival gaps (not just first two)
 - Times shown in America/Los_Angeles timezone
 - API response may have BOM prefix — stripped before JSON parsing

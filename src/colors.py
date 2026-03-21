@@ -29,6 +29,6 @@ def urgency_color(minutes_away: int, walk_minutes: int, thresholds: ThresholdCon
     elif buffer <= thresholds.ideal_max:
         return GREEN
     elif buffer <= thresholds.medium_max:
-        return YELLOW
+        return ORANGE
     else:
         return RED
