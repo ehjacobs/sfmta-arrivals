@@ -159,7 +159,7 @@ def _draw_route_row(
     walker_x = walk_bbox[2] + 3
     _draw_walking_figure(draw, walker_x, top_line_y + 2, 14)
     after_walker_x = walker_x + 12
-    draw.text((after_walker_x, top_line_y), f") \u00b7 {route.direction}", fill=BLACK, font=fonts["stop_info"])
+    draw.text((after_walker_x, top_line_y), f") \u2192 {route.direction}", fill=BLACK, font=fonts["stop_info"])
 
     # Bottom line: arrival times in fixed grid columns
     if not route.arrivals:
