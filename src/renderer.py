@@ -3,6 +3,8 @@ from zoneinfo import ZoneInfo
 
 from PIL import Image, ImageDraw, ImageFont
 
+from datetime import time
+
 from src.colors import (
     BLACK, WHITE, RED, BLUE, UNREACHABLE, ROW_SEPARATOR, urgency_color,
 )
@@ -196,3 +198,50 @@ def _draw_route_row(
         right_edge = WIDTH - 10
         draw.text((right_edge - label_w, top_line_y + 2), label_text, fill=BLACK, font=fonts["frequency_label"])
         draw.text((right_edge - freq_w, bottom_line_y + 2), freq_text, fill=BLACK, font=fonts["frequency"])
+
+
+def render_sleep(wake_time: time) -> Image.Image:
+    """Render a sleep screen with a playful message and the wake time."""
+    img = Image.new("RGB", (WIDTH, HEIGHT), WHITE)
+    draw = ImageDraw.Draw(img)
+    fonts = _load_fonts()
+
+    sleep_font = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 36)
+    wake_font = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 24)
+    zzz_font = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 48)
+
+    # Draw a few "z"s drifting upward
+    zzz_positions = [(320, 100), (380, 70), (430, 50)]
+    zzz_sizes = [48, 36, 28]
+    for (zx, zy), zs in zip(zzz_positions, zzz_sizes):
+        zfont = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), zs)
+        draw.text((zx, zy), "z", fill=BLUE, font=zfont)
+
+    # Draw a moon (crescent via two overlapping circles)
+    moon_cx, moon_cy, moon_r = 400, 200, 50
+    draw.ellipse(
+        [(moon_cx - moon_r, moon_cy - moon_r),
+         (moon_cx + moon_r, moon_cy + moon_r)],
+        fill=BLUE,
+    )
+    # Overlap with white to create crescent
+    draw.ellipse(
+        [(moon_cx - moon_r + 20, moon_cy - moon_r - 10),
+         (moon_cx + moon_r + 20, moon_cy + moon_r - 10)],
+        fill=WHITE,
+    )
+
+    # Main message
+    msg = "The buses are sleeping."
+    msg_bbox = draw.textbbox((0, 0), msg, font=sleep_font)
+    msg_w = msg_bbox[2] - msg_bbox[0]
+    draw.text(((WIDTH - msg_w) // 2, 290), msg, fill=BLACK, font=sleep_font)
+
+    # Wake time message
+    wake_str = wake_time.strftime("%-I:%M %p").lower()
+    wake_msg = f"Back at {wake_str} with fresh arrivals."
+    wake_bbox = draw.textbbox((0, 0), wake_msg, font=wake_font)
+    wake_w = wake_bbox[2] - wake_bbox[0]
+    draw.text(((WIDTH - wake_w) // 2, 345), wake_msg, fill=BLUE, font=wake_font)
+
+    return img

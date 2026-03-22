@@ -21,7 +21,7 @@ make dev     # fetch live data and render to output.png
 - `src/colors.py` — RGB constants, `urgency_color()` returns color or UNREACHABLE sentinel
 - `src/renderer.py` — PIL-based 800x480 image rendering; DejaVu fonts from `fonts/`
 - `src/display.py` — SimulatorDisplay (PNG) for dev, InkyDisplay for Pi hardware
-- `src/main.py` — Entry point with `--config`, `--once`, `--test` flags
+- `src/main.py` — Entry point with `--config`, `--once`, `--test` flags; sleep/wake scheduling
 - `src/lookup.py` — CLI utility to discover route destinations and stop info from the API
 
 ## Key Conventions
@@ -35,6 +35,7 @@ make dev     # fetch live data and render to output.png
 - Route matching uses `LineRef` (e.g., "14R", "J"), not `PublishedLineName` (e.g., "MISSION")
 - Direction matching uses substring match on `DestinationName` (e.g., "Steuart" matches "Steuart St & Mission St")
 - Use `python -m src.lookup --route <route>` to discover valid destination strings
+- Optional `sleep` config defines overnight sleep/wake times (HH:MM, America/Los_Angeles); display shows a sleep screen and stops API calls during this window
 - `config.yaml` contains API secrets — never commit (it's in .gitignore)
 
 ## Deploy to Pi

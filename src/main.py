@@ -1,13 +1,16 @@
 import argparse
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from src.api import fetch_all_arrivals, parse_arrivals
 from src.config import load_config
 from src.display import create_display
 from src.models import DisplayData, RouteArrivals, Arrival
-from src.renderer import render
+from src.renderer import render, render_sleep
+
+SF_TZ = ZoneInfo("America/Los_Angeles")
 
 
 def make_test_data() -> DisplayData:
@@ -77,6 +80,34 @@ def make_test_data() -> DisplayData:
     )
 
 
+def is_sleep_time(sleep_config) -> bool:
+    """Check if current local time falls within the sleep window."""
+    if sleep_config.sleep_time is None:
+        return False
+    now = datetime.now(SF_TZ).time()
+    sleep_t = sleep_config.sleep_time
+    wake_t = sleep_config.wake_time
+    if sleep_t > wake_t:
+        # Overnight: e.g. 21:00 -> 06:00
+        return now >= sleep_t or now < wake_t
+    else:
+        # Same-day: e.g. 01:00 -> 05:00
+        return sleep_t <= now < wake_t
+
+
+def seconds_until_wake(sleep_config) -> float:
+    """Return seconds from now until wake_time."""
+    now = datetime.now(SF_TZ)
+    wake = now.replace(
+        hour=sleep_config.wake_time.hour,
+        minute=sleep_config.wake_time.minute,
+        second=0, microsecond=0,
+    )
+    if wake <= now:
+        wake += timedelta(days=1)
+    return (wake - now).total_seconds()
+
+
 def fetch_and_render(config, display):
     """Fetch live data, render, and display."""
     now = datetime.now(timezone.utc)
@@ -118,8 +149,23 @@ def main():
     # Main loop
     interval = config.refresh_interval_minutes
     print(f"Starting SFMTA Arrivals (refresh every {interval} min, aligned to minute boundary)")
+    sleeping = False
     while True:
         try:
+            if is_sleep_time(config.sleep):
+                if not sleeping:
+                    print("Entering sleep mode")
+                    image = render_sleep(config.sleep.wake_time)
+                    display.show(image)
+                    sleeping = True
+                wait = seconds_until_wake(config.sleep)
+                print(f"Sleeping for {wait / 3600:.1f} hours until wake time")
+                time.sleep(wait)
+                continue
+            elif sleeping:
+                print("Waking up")
+                sleeping = False
+
             fetch_and_render(config, display)
         except KeyboardInterrupt:
             print("\nShutting down")

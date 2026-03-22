@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import time
 from pathlib import Path
 
 import yaml
@@ -27,6 +28,12 @@ class ThresholdConfig:
 
 
 @dataclass
+class SleepConfig:
+    sleep_time: time | None = None  # e.g. time(21, 0) for 9pm
+    wake_time: time | None = None   # e.g. time(6, 0) for 6am
+
+
+@dataclass
 class DisplayConfig:
     simulate: bool = False
     output_path: str = "output.png"
@@ -41,6 +48,7 @@ class AppConfig:
     refresh_interval_minutes: int
     stops: list[StopConfig]
     thresholds: ThresholdConfig
+    sleep: SleepConfig
     display: DisplayConfig
 
 
@@ -77,6 +85,19 @@ def load_config(path: str) -> AppConfig:
     if not (thresholds.rush_max <= thresholds.ideal_max <= thresholds.medium_max):
         raise ValueError("Thresholds must be in ascending order: rush_max <= ideal_max <= medium_max")
 
+    sleep_raw = raw.get("sleep", {})
+    sleep_time = None
+    wake_time = None
+    if sleep_raw.get("sleep_time"):
+        h, m = map(int, sleep_raw["sleep_time"].split(":"))
+        sleep_time = time(h, m)
+    if sleep_raw.get("wake_time"):
+        h, m = map(int, sleep_raw["wake_time"].split(":"))
+        wake_time = time(h, m)
+    if (sleep_time is None) != (wake_time is None):
+        raise ValueError("Both sleep_time and wake_time must be set, or neither")
+    sleep = SleepConfig(sleep_time=sleep_time, wake_time=wake_time)
+
     disp_raw = raw.get("display", {})
     display = DisplayConfig(
         simulate=disp_raw.get("simulate", False),
@@ -92,5 +113,6 @@ def load_config(path: str) -> AppConfig:
                                         raw.get("refresh_interval_seconds", 120) // 60 or 2),
         stops=stops,
         thresholds=thresholds,
+        sleep=sleep,
         display=display,
     )

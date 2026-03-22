@@ -10,6 +10,7 @@ config.yaml
 output.png
 *.png
 !example.png
+!sleep_example.png
 !fonts/*.ttf
 .env
 .DS_Store

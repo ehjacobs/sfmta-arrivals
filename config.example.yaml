@@ -29,6 +29,10 @@ thresholds:
   ideal_max: 5
   medium_max: 10
 
+sleep:
+  sleep_time: "21:00"   # stop updating at 9pm
+  wake_time: "06:00"    # resume at 6am
+
 display:
   simulate: true
   output_path: "output.png"

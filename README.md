@@ -4,6 +4,10 @@ Real-time SF Muni arrival times, color-coded by whether you can walk to the stop
 
 ![Display preview](example.png)
 
+Overnight, the display sleeps and stops making API calls:
+
+![Sleep screen](sleep_example.png)
+
 Shows up to 6 routes across multiple stops:
 
 - **~~Strikethrough~~** — you can't make it
@@ -75,6 +79,10 @@ thresholds:                    # minutes of buffer after walk time
   ideal_max: 5                 # buffer 0-5 → go now (green)
   medium_max: 10               # buffer 5-10 → moderate wait (yellow)
                                # buffer > 10 → long wait (red)
+
+sleep:                           # optional — omit to stay on 24/7
+  sleep_time: "21:00"            # stop updating at 9pm
+  wake_time: "06:00"             # resume at 6am
 
 display:
   simulate: true               # true = save PNG, false = Inky hardware
@@ -160,6 +168,7 @@ make dev           # fetch live data, render to output.png
 - At the default 2-minute refresh interval, this uses ~30 API calls/hour (limit is 60/hour)
 - Frequency is calculated by averaging gaps across all available upcoming arrivals, smoothing out bus bunching
 - The 7-color e-ink display takes ~25 seconds for a full refresh (no partial refresh on these panels)
+- If a `sleep` schedule is configured, the display switches to a sleep screen overnight and stops making API calls until the wake time
 
 ## Disclaimer
 
