@@ -1,7 +1,10 @@
+import json
 import time
 from datetime import datetime, timezone
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from src.config import AppConfig
 from src.models import Arrival, DisplayData, RouteArrivals
@@ -28,10 +31,27 @@ class RateLimiter:
 _rate_limiter = RateLimiter()
 
 
+def _create_session() -> requests.Session:
+    """Create a session with retry/backoff for transient network errors."""
+    session = requests.Session()
+    retry = Retry(
+        total=2,
+        backoff_factor=3,
+        status_forcelist=[500, 502, 503, 504],
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
+
+
+_session = _create_session()
+
+
 def fetch_all_arrivals(api_key: str, agency: str) -> dict:
     """Fetch all stop monitoring data for the agency in a single API call."""
     if not _rate_limiter.can_call():
-        raise RuntimeError("Rate limit approaching — skipping API call")
+        raise RuntimeError("Rate limit reached")
 
     url = "http://api.511.org/transit/StopMonitoring"
     params = {
@@ -40,14 +60,20 @@ def fetch_all_arrivals(api_key: str, agency: str) -> dict:
         "format": "json",
     }
 
-    resp = requests.get(url, params=params, timeout=30)
-    resp.raise_for_status()
+    try:
+        resp = _session.get(url, params=params, timeout=30)
+        resp.raise_for_status()
+    except requests.Timeout:
+        raise ConnectionError("API request timed out")
+    except requests.ConnectionError:
+        raise ConnectionError("Unable to reach 511.org API")
+    except requests.HTTPError as e:
+        raise ConnectionError(f"API error (HTTP {e.response.status_code})")
 
     _rate_limiter.record_call()
 
     # 511.org sometimes returns a BOM at the start of the response
     text = resp.text.lstrip("\ufeff")
-    import json
     return json.loads(text)
 
 

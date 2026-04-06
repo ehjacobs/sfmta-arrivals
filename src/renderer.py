@@ -59,8 +59,12 @@ def render(data: DisplayData, thresholds: ThresholdConfig) -> Image.Image:
         tw = bbox[2] - bbox[0]
         draw.text((WIDTH - tw - 10, 11), time_str, fill=WHITE, font=fonts["header_small"])
 
-    # Error banner
+    # Error state with no route data — show a full-screen error message
     banner_y = HEADER_HEIGHT
+    if data.errors and not data.routes:
+        return _render_error_screen(img, draw, fonts, data.errors)
+
+    # Error banner when there are errors alongside route data
     if data.errors:
         error_text = " | ".join(data.errors)
         draw.rectangle([(0, banner_y), (WIDTH, banner_y + 24)], fill=RED)
@@ -70,7 +74,7 @@ def render(data: DisplayData, thresholds: ThresholdConfig) -> Image.Image:
     # Rows
     row_count = min(len(data.routes), MAX_ROWS)
     if row_count == 0:
-        msg = "No routes configured" if not data.errors else "Waiting for data..."
+        msg = "No routes configured"
         draw.text((WIDTH // 2 - 100, HEIGHT // 2), msg, fill=BLACK, font=fonts["stop_info"])
         return img
 
@@ -85,6 +89,31 @@ def render(data: DisplayData, thresholds: ThresholdConfig) -> Image.Image:
             draw.line([(0, y), (WIDTH, y)], fill=ROW_SEPARATOR, width=1)
 
         _draw_route_row(draw, fonts, route, thresholds, y, row_height)
+
+    return img
+
+
+def _render_error_screen(
+    img: Image.Image,
+    draw: ImageDraw.ImageDraw,
+    fonts: dict,
+    errors: list[str],
+) -> Image.Image:
+    """Render a clean, centered error screen for when no route data is available."""
+    error_font = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans-Bold.ttf"), 28)
+    detail_font = ImageFont.truetype(str(FONTS_DIR / "DejaVuSans.ttf"), 20)
+
+    # Main error message
+    error_msg = errors[0] if errors else "Unknown error"
+    msg_bbox = draw.textbbox((0, 0), error_msg, font=error_font)
+    msg_w = msg_bbox[2] - msg_bbox[0]
+    draw.text(((WIDTH - msg_w) // 2, 180), error_msg, fill=RED, font=error_font)
+
+    # Subtitle
+    subtitle = "Will retry at next refresh."
+    sub_bbox = draw.textbbox((0, 0), subtitle, font=detail_font)
+    sub_w = sub_bbox[2] - sub_bbox[0]
+    draw.text(((WIDTH - sub_w) // 2, 230), subtitle, fill=BLACK, font=detail_font)
 
     return img
 
